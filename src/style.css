@@ -1,7 +1,7 @@
-h1 {
-  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
-}
-
-small {
-  margin-top: 40px;
+body {
+  background-color: aqua;
+  color: yellow;
+  margin: 0;
+  padding: 20px;
+  font-family: sans-serif;
 }
