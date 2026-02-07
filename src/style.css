@@ -304,3 +304,11 @@ a.repo-link:hover {
 .main-footer {
   margin-top: 30px;
 }
+
+.main-header[data-show="false"] {
+  transform: translate(-50%, -120px);
+}
+
+.main-header[data-show="true"] {
+  transform: translate(-50%, 0);
+}
