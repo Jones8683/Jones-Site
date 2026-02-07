@@ -4,151 +4,6 @@
   box-sizing: border-box;
 }
 
-body {
-  min-height: 100vh;
-  background-color: #1a1c24;
-  background-image:
-    radial-gradient(at 0% 0%, rgba(58, 123, 213, 0.3) 0, transparent 50%),
-    radial-gradient(at 50% 0%, rgba(121, 159, 225, 0.25) 0, transparent 60%),
-    radial-gradient(at 100% 0%, rgba(30, 144, 255, 0.3) 0, transparent 50%),
-    radial-gradient(at 80% 50%, rgba(58, 123, 213, 0.15) 0, transparent 40%),
-    radial-gradient(at 20% 80%, rgba(0, 123, 255, 0.1) 0, transparent 50%);
-  color: white;
-  font-family: "Satoshi", sans-serif;
-  margin: 0;
-  padding: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.main-header {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 800px;
-  z-index: 1000;
-  background-color: rgba(10, 11, 14, 0.85);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.nav-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 24px;
-}
-
-.nav-name {
-  font-family: "Satoshi", sans-serif;
-  font-weight: 700;
-  font-size: 1.4rem;
-  color: #ffffff;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  margin-top: -2px;
-  margin-bottom: -2px;
-}
-
-.nav-right {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-}
-
-.nav-icon svg {
-  width: 26px;
-  height: 26px;
-  display: block;
-}
-
-.nav-item {
-  font-family: "Satoshi", sans-serif;
-  text-decoration: none;
-  color: #64748b;
-  font-size: 0.85rem;
-  font-weight: 500;
-  transition: color 0.2s ease;
-}
-
-.nav-item:hover {
-  color: #ffffff;
-}
-
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  padding-top: 120px;
-}
-
-.profile-pic {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  border: 4px solid #363636;
-  object-fit: cover;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-}
-
-.name-title {
-  font-family: "Satoshi", sans-serif;
-  font-size: 30px;
-  font-weight: 700;
-  color: rgb(250, 250, 250);
-  line-height: 36px;
-  margin: 0;
-  letter-spacing: -0.5px;
-}
-
-.location-text {
-  font-size: 16px;
-  color: #94a3b8;
-  margin-top: -8px;
-  font-weight: 400;
-}
-
-.spacer {
-  height: 120vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.content-block {
-  text-align: center;
-  max-width: 600px;
-  padding: 40px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 24px;
-}
-
-.content-block h2 {
-  font-size: 2rem;
-  margin-bottom: 1rem;
-}
-
-.main-footer {
-  padding: 60px 20px;
-  text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.main-footer p {
-  color: #64748b;
-  font-size: 0.9rem;
-}
-
-.scroll-spacer {
-  height: 100vh;
-}
-
 :root {
   --scrollbar-thumb-bg: #475569;
 }
@@ -174,6 +29,146 @@ main {
 }
 
 body {
+  min-height: 100vh;
+  background-color: #1a1c24;
+  background-image:
+    radial-gradient(at 0% 0%, rgba(58, 123, 213, 0.3) 0, transparent 50%),
+    radial-gradient(at 50% 0%, rgba(121, 159, 225, 0.25) 0, transparent 60%),
+    radial-gradient(at 100% 0%, rgba(30, 144, 255, 0.3) 0, transparent 50%),
+    radial-gradient(at 80% 50%, rgba(58, 123, 213, 0.15) 0, transparent 40%),
+    radial-gradient(at 20% 80%, rgba(0, 123, 255, 0.1) 0, transparent 50%);
+  color: white;
+  font-family: "Satoshi", sans-serif;
+  overflow-y: auto;
+  overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--scrollbar-thumb-bg) transparent;
+}
+
+.main-header {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1400px;
+  z-index: 1000;
+  background-color: rgba(10, 11, 14, 0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main-header.minimized {
+  top: 15px;
+  width: 90%;
+  max-width: 800px;
+  background-color: rgba(10, 11, 14, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 18px;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 150px;
+  transition: padding 0.5s ease;
+}
+
+.main-header.minimized .nav-container {
+  padding: 12px 24px;
+}
+
+.nav-left a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-name {
+  font-weight: 700;
+  font-size: 1.4rem;
+  color: #ffffff;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.nav-right {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-icon.discord-icon svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+.nav-icon.github-icon svg {
+  width: 23px;
+  height: 23px;
+  display: block;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-top: 180px;
+}
+
+.profile-pic {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 4px solid #363636;
+  object-fit: cover;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.name-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: rgb(250, 250, 250);
+  line-height: 36px;
+  letter-spacing: -0.5px;
+}
+
+.location-text {
+  font-size: 16px;
+  color: #94a3b8;
+  margin-top: -8px;
+  font-weight: 400;
+}
+
+.scroll-spacer {
+  height: 80vh;
+}
+
+.main-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 20px; /* Moves text closer to very bottom */
+}
+
+.footer-line {
+  width: 90%; /* Almost all the way across */
+  max-width: 1200px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1); /* Subtle line color */
+  margin-bottom: 20px;
+}
+
+.main-footer p {
+  color: #64748b;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
 }
