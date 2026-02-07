@@ -49,7 +49,7 @@ body {
   position: fixed;
   top: 20px;
   left: 50%;
-  transform: translateX(-50%) translateY(0);
+  transform: translateX(-50%);
   width: 100%;
   max-width: 1400px;
   z-index: 1000;
@@ -58,39 +58,30 @@ body {
   -webkit-backdrop-filter: blur(0px);
   border-radius: 24px;
   border: 1px solid rgba(255, 255, 255, 0);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0);
-  transition:
-    background-color 0.5s ease,
-    backdrop-filter 0.5s ease,
-    border-color 0.5s ease,
-    box-shadow 0.5s ease,
-    transform 0.5s ease,
-    width 0.5s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .main-header.minimized {
   top: 15px;
   width: 90%;
   max-width: 800px;
-  transform: translateX(-50%) translateY(0);
   background-color: rgba(10, 11, 14, 0.85);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 18px;
-  box-shadow: 0 18px 40px rgba(8, 10, 15, 0.45);
 }
 
 .nav-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 150px;
+  padding: 20px 80px;
   transition: padding 0.5s ease;
 }
 
 .main-header.minimized .nav-container {
-  padding: 12px 24px;
+  padding: 2px 20px;
 }
 
 .nav-left a {
@@ -119,7 +110,7 @@ body {
 
 .nav-right {
   display: flex;
-  gap: 20px;
+  gap: 10px;
   align-items: center;
 }
 
@@ -158,7 +149,7 @@ main {
   flex-direction: column;
   align-items: center;
   gap: 16px;
-  padding-top: 180px;
+  padding-top: 130px;
 }
 
 .content-wrap {
@@ -275,7 +266,7 @@ main {
 }
 
 .scroll-spacer {
-  height: 80vh;
+  height: 40vh;
 }
 
 .main-footer {
@@ -283,14 +274,14 @@ main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 20px; /* Moves text closer to very bottom */
+  padding-bottom: 20px;
 }
 
 .footer-line {
-  width: 90%; /* Almost all the way across */
+  width: 90%;
   max-width: 1200px;
   height: 1px;
-  background: rgba(255, 255, 255, 0.1); /* Subtle line color */
+  background: rgba(255, 255, 255, 0.1);
   margin-bottom: 20px;
 }
 
