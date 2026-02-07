@@ -290,3 +290,12 @@ main {
   font-size: 0.85rem;
   letter-spacing: 0.5px;
 }
+
+a.repo-link {
+  color: lightskyblue;
+  text-decoration: none;
+}
+
+a.repo-link:hover {
+  text-decoration: underline;
+}
