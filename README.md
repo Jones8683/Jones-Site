@@ -1,55 +1,27 @@
 # Jones Jankovic - Personal Site
 
-A minimal personal site built with Vite and deployed to GitHub Pages.
-
-## 🚀 Quick Start
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-
-# Preview production build
-npm run preview
-```
-
-## 📦 Technologies
-
-- **Vite** - Fast build tool and dev server
-- **GitHub Actions** - Automated deployment
-- **GitHub Pages** - Hosting
-
-## 🌐 Deployment
-
-The site is automatically deployed to [jonesjankovic.dev](https://jonesjankovic.dev) when changes are pushed to the `main` branch.
-
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment information.
+A simple personal site - just HTML and CSS, hosted on GitHub Pages.
 
 ## 📁 Project Structure
 
 ```
 .
-├── src/
-│   ├── style.css      # Styles
-│   └── main.js        # JavaScript entry point (if needed)
-├── public/
-│   └── CNAME          # Custom domain configuration
 ├── index.html         # Main HTML file
-├── vite.config.js     # Vite configuration
-└── package.json       # Dependencies and scripts
+├── src/
+│   └── style.css      # Styles
+├── favicon.png        # Site icon
+├── github.png         # Profile picture
+└── CNAME              # Custom domain: jonesjankovic.dev
 ```
 
-## 🛠️ Configuration
+## 🌐 Deployment
 
-- **Custom Domain**: Configured via `public/CNAME`
-- **Build Output**: `dist/` directory (gitignored)
-- **Base Path**: Set to `./` for GitHub Pages compatibility
+This site is deployed to [jonesjankovic.dev](https://jonesjankovic.dev) via GitHub Pages.
 
-## 📝 License
+Simply push changes to GitHub and they'll appear on the site!
 
-Personal site - All rights reserved.
+## 📝 Notes
+
+- This is a static site - no build process needed
+- CSS is linked directly in the HTML
+- GitHub Pages serves the files directly from the repository
