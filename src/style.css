@@ -88,9 +88,74 @@ body {
   padding: 2px 20px;
 }
 
-.nav-left a {
-  text-decoration: none;
-  color: inherit;
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.glass-nav {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.glass-btn {
+  text-decoration: none !important;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.85rem;
+  font-weight: 400;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.glass-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.nav-name-link {
+  text-decoration: none !important;
+}
+
+@media (max-width: 650px) {
+  .nav-left {
+    gap: 12px;
+  }
+
+  .glass-nav {
+    gap: 5px;
+  }
+
+  .nav-name {
+    font-size: 1.1rem;
+  }
+
+  .glass-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+}
+
+.nav-left a,
+.nav-name-link,
+.nav-item,
+.nav-link-item,
+.repo-btn {
+  text-decoration: none !important;
+}
+
+.nav-name-link:hover,
+.nav-item:hover,
+.nav-link-item:hover {
+  text-decoration: none !important;
 }
 
 .nav-name-link {
