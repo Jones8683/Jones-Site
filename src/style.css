@@ -102,7 +102,7 @@ body {
 
 .glass-btn {
   text-decoration: none !important;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.8) !important;
   font-size: 0.85rem;
   font-weight: 400;
   padding: 6px 14px;
@@ -112,12 +112,15 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .glass-btn:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.3);
-  color: #ffffff;
+  color: #ffffff !important;
   transform: translateY(-1px);
 }
 
@@ -125,22 +128,31 @@ body {
   text-decoration: none !important;
 }
 
-@media (max-width: 650px) {
-  .nav-left {
-    gap: 12px;
+@media (max-width: 720px) {
+  .nav-container {
+    padding: 15px 20px !important;
   }
 
-  .glass-nav {
-    gap: 5px;
+  .nav-left {
+    gap: 12px !important;
   }
 
   .nav-name {
-    font-size: 1.1rem;
+    font-size: 1.1rem !important;
+    white-space: nowrap;
+  }
+
+  .glass-nav {
+    gap: 6px !important;
   }
 
   .glass-btn {
-    padding: 4px 10px;
-    font-size: 0.75rem;
+    padding: 5px 10px !important;
+    font-size: 0.75rem !important;
+  }
+
+  .nav-right {
+    gap: 5px !important;
   }
 }
 
