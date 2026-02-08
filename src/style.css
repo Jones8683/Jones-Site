@@ -366,3 +366,16 @@ a.repo-link:hover {
     grid-template-columns: 1fr;
   }
 }
+
+.about-section .repo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.about-section .repo-desc {
+  font-size: 12px !important;
+  color: #94a3b8 !important;
+  margin: 0 !important;
+  line-height: 1.2 !important;
+}
