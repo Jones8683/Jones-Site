@@ -583,7 +583,10 @@ a.repo-link:hover {
   .desktop-game {
     display: none !important;
   }
+
   .mobile-msg {
     display: block !important;
+    width: 100%;
+    text-align: center;
   }
 }
