@@ -223,6 +223,8 @@ main {
   grid-template-columns: minmax(140px, 200px) minmax(0, 1fr);
   gap: 24px;
   text-align: left;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(4px);
 }
 
 .about-title h2 {
