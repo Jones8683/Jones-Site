@@ -60,6 +60,7 @@
         flex-direction: column;
         align-items: center;
         min-height: 100vh;
+        width: 100%;
         text-align: center;
         background: transparent;
       "
@@ -205,138 +206,150 @@
         }
       </style>
 
-<div class="mobile-msg">
-  <div class="content-wrap">
-    <h1 class="name-title" style="font-size: 30px; margin-bottom: 5px; letter-spacing: -2px; margin-top: 40px;">
-      Not supported on mobile
-    </h1>
-    <a href="/games/" class="repo-link" style="margin-top: 5px; font-size: 16px; display: inline-block">
-      ← Back to games
-    </a>
-  </div>
-  </div>
-    <div class="desktop-game">
-    <div class="game-wrapper">
-        <div class="left-section">
-          <canvas id="gameCanvas" width="300" height="500"></canvas>
-
-          <div
-            id="gameOverMsg"
+      <div class="mobile-msg">
+        <div class="content-wrap">
+          <h1
+            class="name-title"
             style="
-              display: none;
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background: rgba(0, 0, 0, 0.85);
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              z-index: 10;
-              border-radius: 8px;
+              font-size: 30px;
+              margin-bottom: 5px;
+              letter-spacing: -2px;
+              margin-top: 40px;
             "
           >
-            <h2 style="font-size: 24px; color: white; margin: 0 0 10px 0">
-              GAME OVER
-            </h2>
-            <button
-              onclick="resetGame()"
-              style="
-                background: white;
-                color: black;
-                border: none;
-                padding: 10px 20px;
-                font-weight: bold;
-                cursor: pointer;
-                border-radius: 4px;
-              "
-            >
-              RETRY
-            </button>
-          </div>
-
-          <div
-            id="pauseMsg"
-            style="
-              display: none;
-              position: absolute;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background: rgba(0, 0, 0, 0.6);
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-              z-index: 9;
-              border-radius: 8px;
-            "
+            Not supported on mobile
+          </h1>
+          <a
+            href="/games/"
+            class="repo-link"
+            style="margin-top: 5px; font-size: 16px; display: inline-block"
           >
-            <h2
-              style="
-                font-size: 24px;
-                color: white;
-                margin: 0;
-                letter-spacing: 2px;
-              "
-            >
-              PAUSED
-            </h2>
-          </div>
+            ← Back to games
+          </a>
         </div>
+      </div>
+      <div class="desktop-game">
+        <div class="game-wrapper">
+          <div class="left-section">
+            <canvas id="gameCanvas" width="300" height="500"></canvas>
 
-        <div class="right-section">
-          <h1 class="game-title">Tetris</h1>
-
-          <div class="row">
-            <div class="info-box">
-              <div class="label">Next</div>
-              <canvas
-                id="nextCanvas"
-                width="100"
-                height="100"
-                class="side-canvas"
-              ></canvas>
+            <div
+              id="gameOverMsg"
+              style="
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.85);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+                border-radius: 8px;
+              "
+            >
+              <h2 style="font-size: 24px; color: white; margin: 0 0 10px 0">
+                GAME OVER
+              </h2>
+              <button
+                onclick="resetGame()"
+                style="
+                  background: white;
+                  color: black;
+                  border: none;
+                  padding: 10px 20px;
+                  font-weight: bold;
+                  cursor: pointer;
+                  border-radius: 4px;
+                "
+              >
+                RETRY
+              </button>
             </div>
 
-            <div class="info-box">
-              <div class="label">Hold</div>
-              <canvas
-                id="holdCanvas"
-                width="100"
-                height="100"
-                class="side-canvas"
-              ></canvas>
+            <div
+              id="pauseMsg"
+              style="
+                display: none;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.6);
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 9;
+                border-radius: 8px;
+              "
+            >
+              <h2
+                style="
+                  font-size: 24px;
+                  color: white;
+                  margin: 0;
+                  letter-spacing: 2px;
+                "
+              >
+                PAUSED
+              </h2>
             </div>
           </div>
 
-          <div class="info-box score-box">
-            <div class="label score-label">Score</div>
-            <div class="value score-value" id="scoreDiv">0</div>
-          </div>
+          <div class="right-section">
+            <h1 class="game-title">Tetris</h1>
 
-          <div class="controls-container">
-            <div class="control-item">
-              <span>Move</span>
-              <div><span class="key">←</span> <span class="key">→</span></div>
+            <div class="row">
+              <div class="info-box">
+                <div class="label">Next</div>
+                <canvas
+                  id="nextCanvas"
+                  width="100"
+                  height="100"
+                  class="side-canvas"
+                ></canvas>
+              </div>
+
+              <div class="info-box">
+                <div class="label">Hold</div>
+                <canvas
+                  id="holdCanvas"
+                  width="100"
+                  height="100"
+                  class="side-canvas"
+                ></canvas>
+              </div>
             </div>
-            <div class="control-item">
-              <span>Rotate</span> <span class="key">↑</span>
+
+            <div class="info-box score-box">
+              <div class="label score-label">Score</div>
+              <div class="value score-value" id="scoreDiv">0</div>
             </div>
-            <div class="control-item">
-              <span>Hard Drop</span> <span class="key">SPACE</span>
-            </div>
-            <div class="control-item">
-              <span>Hold</span> <span class="key">C</span>
-            </div>
-            <div class="control-item">
-              <span>Pause</span> <span class="key">P</span>
+
+            <div class="controls-container">
+              <div class="control-item">
+                <span>Move</span>
+                <div><span class="key">←</span> <span class="key">→</span></div>
+              </div>
+              <div class="control-item">
+                <span>Rotate</span> <span class="key">↑</span>
+              </div>
+              <div class="control-item">
+                <span>Hard Drop</span> <span class="key">SPACE</span>
+              </div>
+              <div class="control-item">
+                <span>Hold</span> <span class="key">C</span>
+              </div>
+              <div class="control-item">
+                <span>Pause</span> <span class="key">P</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
       <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
