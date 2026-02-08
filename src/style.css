@@ -128,31 +128,38 @@ body {
   text-decoration: none !important;
 }
 
-@media (max-width: 720px) {
+@media (max-width: 650px) {
+  .nav-name {
+    display: none !important;
+  }
+
   .nav-container {
-    padding: 15px 20px !important;
+    padding: 10px 16px !important;
+    justify-content: space-between !important;
   }
 
   .nav-left {
-    gap: 12px !important;
-  }
-
-  .nav-name {
-    font-size: 1.1rem !important;
-    white-space: nowrap;
+    gap: 0 !important;
   }
 
   .glass-nav {
-    gap: 6px !important;
+    gap: 8px !important;
   }
 
   .glass-btn {
-    padding: 5px 10px !important;
-    font-size: 0.75rem !important;
+    padding: 8px 14px !important;
+    font-size: 0.8rem !important;
+    background: rgba(255, 255, 255, 0.08) !important;
   }
 
   .nav-right {
-    gap: 5px !important;
+    gap: 12px !important;
+  }
+
+  .nav-icon.discord-icon svg,
+  .nav-icon.github-icon svg {
+    width: 22px !important;
+    height: 22px !important;
   }
 }
 
