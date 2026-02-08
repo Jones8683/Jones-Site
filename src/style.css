@@ -476,3 +476,104 @@ a.repo-link:hover {
   margin: 0 !important;
   line-height: 1.2 !important;
 }
+
+.name-title {
+  margin-top: 20px !important;
+  margin-bottom: 4px !important;
+  font-size: 72px;
+}
+
+.arcade-subtitle {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+
+.arcade-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+  .arcade-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.arcade-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 210px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.arcade-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.arcade-card-top {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+}
+
+.arcade-icon {
+  font-size: 2.5rem;
+}
+
+.arcade-name {
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.arcade-card-bottom {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none !important;
+  font-weight: 800;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+}
+
+.tetris-btn {
+  background: rgba(255, 71, 87, 0.05);
+  color: #ff4757;
+}
+
+.tetris-btn:hover {
+  background: #ff4757;
+  color: white;
+}
+
+.flappy-btn {
+  background: rgba(255, 165, 2, 0.05);
+  color: #ffa502;
+}
+
+.flappy-btn:hover {
+  background: #ffa502;
+  color: white;
+}
