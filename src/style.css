@@ -571,3 +571,19 @@ a.repo-link:hover {
   background: #ffa502;
   color: white;
 }
+
+.mobile-msg {
+  display: none;
+}
+.desktop-game {
+  display: block;
+}
+
+@media (max-width: 850px) {
+  .desktop-game {
+    display: none !important;
+  }
+  .mobile-msg {
+    display: block !important;
+  }
+}
