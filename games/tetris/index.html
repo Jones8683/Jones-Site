@@ -120,11 +120,17 @@
           aspect-ratio: 1;
         }
 
-        .wide-box {
+        .score-box {
           aspect-ratio: auto;
-          min-height: 100px;
-          justify-content: flex-start;
-          align-items: flex-start;
+          min-height: 120px;
+          width: 100%;
+          background: linear-gradient(
+            135deg,
+            rgba(255, 215, 0, 0.05),
+            rgba(255, 215, 0, 0.01)
+          );
+          border: 1px solid rgba(255, 215, 0, 0.3);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
         .label {
@@ -138,8 +144,9 @@
           font-weight: 700;
         }
 
-        .label-left {
-          text-align: left;
+        .score-label {
+          color: #ffd700;
+          margin-bottom: 4px;
         }
 
         .value {
@@ -150,6 +157,12 @@
           line-height: 1;
         }
 
+        .score-value {
+          font-size: 42px;
+          color: #fff;
+          text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
         canvas {
           display: block;
           background-color: #0d0d0d;
@@ -158,32 +171,6 @@
 
         .side-canvas {
           background-color: transparent;
-        }
-
-        .controls-list {
-          display: flex;
-          flex-direction: column;
-          gap: 6px;
-          width: 100%;
-        }
-
-        .control-item {
-          font-size: 10px;
-          color: #94a3b8;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-        }
-
-        .key {
-          color: #fff;
-          font-weight: 700;
-          background: rgba(255, 255, 255, 0.1);
-          padding: 2px 4px;
-          border-radius: 3px;
-          font-size: 9px;
-          min-width: 16px;
-          text-align: center;
         }
       </style>
 
@@ -253,32 +240,9 @@
             </div>
           </div>
 
-          <div class="row">
-            <div class="info-box wide-box">
-              <div class="label label-left">Score</div>
-              <div class="value" id="scoreDiv">0</div>
-            </div>
-
-            <div class="info-box wide-box">
-              <div class="label label-left">Controls</div>
-              <div class="controls-list">
-                <div class="control-item">
-                  <span>Move</span>
-                  <div>
-                    <span class="key">←</span><span class="key">→</span>
-                  </div>
-                </div>
-                <div class="control-item">
-                  <span>Rotate</span> <span class="key">↑</span>
-                </div>
-                <div class="control-item">
-                  <span>Drop</span> <span class="key">SPACE</span>
-                </div>
-                <div class="control-item">
-                  <span>Hold</span> <span class="key">C</span>
-                </div>
-              </div>
-            </div>
+          <div class="info-box score-box">
+            <div class="label score-label">Score</div>
+            <div class="value score-value" id="scoreDiv">0</div>
           </div>
         </div>
       </div>
@@ -514,6 +478,24 @@
           dropCounter = 0;
         }
 
+        function getPieceBounds(matrix) {
+          let minX = matrix[0].length;
+          let maxX = 0;
+          let found = false;
+
+          for (let y = 0; y < matrix.length; y++) {
+            for (let x = 0; x < matrix[y].length; x++) {
+              if (matrix[y][x] !== 0) {
+                if (x < minX) minX = x;
+                if (x > maxX) maxX = x;
+                found = true;
+              }
+            }
+          }
+          if (!found) return { xOffset: 0, width: matrix[0].length };
+          return { xOffset: minX, width: maxX - minX + 1 };
+        }
+
         function playerHardDrop() {
           const startY = player.pos.y;
           while (!collide(arena, player)) {
@@ -521,11 +503,13 @@
           }
           player.pos.y--;
 
+          const bounds = getPieceBounds(player.matrix);
+
           hardDropEffect = {
             active: true,
-            x: player.pos.x,
+            x: player.pos.x + bounds.xOffset,
             y: startY,
-            w: player.matrix[0].length,
+            w: bounds.width,
             h: player.pos.y - startY + player.matrix.length,
             alpha: 0.4,
           };
