@@ -314,3 +314,55 @@ a.repo-link:hover {
 .main-header[data-show="true"] {
   transform: translate(-50%, 0);
 }
+
+.about-section .repo-button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.about-section .repo-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.4s ease;
+}
+
+.about-section .repo-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(135, 206, 250, 0.25);
+}
+
+.about-section .repo-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.about-section .repo-logo-placeholder {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.about-section .repo-btn-name {
+  color: #cbd5f5;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 650px) {
+  .about-section .repo-button-grid {
+    grid-template-columns: 1fr;
+  }
+}
