@@ -356,7 +356,7 @@
         const pauseMsg = document.getElementById("pauseMsg");
         const winnerNameDiv = document.getElementById("winnerName");
 
-        const WIN_SCORE = 5;
+        const WIN_SCORE = 7;
         const PADDLE_W = 12;
         const PADDLE_H = 85;
         const BALL_SIZE = 8;
@@ -365,13 +365,14 @@
         let animationId;
         let isPaused = false;
         let isRunning = false;
+        let isResetting = false;
 
         const leftPaddle = {
           x: 20,
           y: 210,
           score: 0,
           dy: 0,
-          speed: 9,
+          speed: 7,
           aiSpeed: 6,
         };
 
@@ -380,16 +381,16 @@
           y: 210,
           score: 0,
           dy: 0,
-          speed: 9,
+          speed: 7,
         };
 
         const ball = {
           x: 350,
           y: 250,
-          dx: 5,
-          dy: 5,
-          speed: 7,
-          baseSpeed: 4,
+          dx: 3,
+          dy: 3,
+          speed: 3,
+          baseSpeed: 7,
         };
 
         function showStartScreen() {
@@ -408,7 +409,6 @@
           gameMode = mode;
           leftPaddle.score = 0;
           rightPaddle.score = 0;
-          resetBall();
 
           startScreen.style.display = "none";
           gameOverMsg.style.display = "none";
@@ -419,15 +419,28 @@
           isRunning = true;
           isPaused = false;
 
+          resetPositions();
           gameLoop();
         }
 
-        function resetBall() {
+        function resetPositions() {
           ball.x = canvas.width / 2;
           ball.y = canvas.height / 2;
           ball.speed = ball.baseSpeed;
-          ball.dx = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
-          ball.dy = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
+          ball.dx = 0;
+          ball.dy = 0;
+
+          leftPaddle.y = canvas.height / 2 - PADDLE_H / 2;
+          rightPaddle.y = canvas.height / 2 - PADDLE_H / 2;
+
+          isResetting = true;
+
+          setTimeout(() => {
+            if (!isRunning) return;
+            isResetting = false;
+            ball.dx = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
+            ball.dy = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
+          }, 1000);
         }
 
         function togglePause() {
@@ -459,8 +472,10 @@
           if (rightPaddle.y + PADDLE_H > canvas.height)
             rightPaddle.y = canvas.height - PADDLE_H;
 
-          ball.x += ball.dx;
-          ball.y += ball.dy;
+          if (!isResetting) {
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+          }
 
           if (ball.y - BALL_SIZE < 0 || ball.y + BALL_SIZE > canvas.height) {
             ball.dy *= -1;
@@ -485,12 +500,12 @@
             rightPaddle.score++;
             scoreDiv.innerText = `${leftPaddle.score} - ${rightPaddle.score}`;
             checkWin();
-            resetBall();
+            if (isRunning) resetPositions();
           } else if (ball.x > canvas.width) {
             leftPaddle.score++;
             scoreDiv.innerText = `${leftPaddle.score} - ${rightPaddle.score}`;
             checkWin();
-            resetBall();
+            if (isRunning) resetPositions();
           }
         }
 
