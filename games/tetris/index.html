@@ -204,6 +204,28 @@
           text-align: center;
           display: inline-block;
         }
+
+        /* Mobile View Toggle */
+        .mobile-msg {
+          display: none;
+        }
+        .desktop-game {
+          display: block;
+        }
+
+        @media (max-width: 850px) {
+          .desktop-game {
+            display: none !important;
+          }
+          .mobile-msg {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            text-align: center;
+            padding: 0 20px;
+          }
+        }
       </style>
 
       <div class="mobile-msg">
@@ -211,23 +233,28 @@
           <h1
             class="name-title"
             style="
-              font-size: 30px;
-              margin-bottom: 5px;
+              font-size: 48px;
+              margin-bottom: 24px;
               letter-spacing: -2px;
               margin-top: 40px;
+              width: 100%;
             "
           >
-            Not supported on mobile
+            Mobile not supported
           </h1>
+          <p style="color: #94a3b8; font-size: 16px">
+            Please use a computer to play Tetris.
+          </p>
           <a
             href="/games/"
             class="repo-link"
-            style="margin-top: 5px; font-size: 16px; display: inline-block"
+            style="margin-top: 40px; font-size: 16px; display: inline-block"
           >
             ← Back to games
           </a>
         </div>
       </div>
+
       <div class="desktop-game">
         <div class="game-wrapper">
           <div class="left-section">
@@ -247,7 +274,7 @@
                 align-items: center;
                 justify-content: center;
                 z-index: 10;
-                border-radius: 8px;
+                border-radius: 16px;
               "
             >
               <h2 style="font-size: 24px; color: white; margin: 0 0 10px 0">
@@ -350,6 +377,7 @@
           </div>
         </div>
       </div>
+
       <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
@@ -678,8 +706,7 @@
         function playerHold() {
           if (!player.canHold) return;
 
-          const currentPos = { x: player.pos.x, y: player.pos.y };
-
+          // Swap logic
           if (player.hold === null) {
             player.hold = player.matrix;
             player.matrix = player.next;
@@ -693,38 +720,10 @@
 
           drawPreview(holdCtx, player.hold);
 
-          player.pos.x = currentPos.x;
-          player.pos.y = currentPos.y;
-
-          if (collide(arena, player)) {
-            if (
-              !collide(arena, {
-                ...player,
-                pos: { x: player.pos.x + 1, y: player.pos.y },
-              })
-            ) {
-              player.pos.x++;
-            } else if (
-              !collide(arena, {
-                ...player,
-                pos: { x: player.pos.x - 1, y: player.pos.y },
-              })
-            ) {
-              player.pos.x--;
-            } else if (
-              !collide(arena, {
-                ...player,
-                pos: { x: player.pos.x, y: player.pos.y - 1 },
-              })
-            ) {
-              player.pos.y--;
-            } else {
-              player.pos.y = 0;
-              player.pos.x =
-                ((arena[0].length / 2) | 0) -
-                ((player.matrix[0].length / 2) | 0);
-            }
-          }
+          // RESET POSITION TO TOP CENTER
+          player.pos.y = 0;
+          player.pos.x =
+            ((arena[0].length / 2) | 0) - ((player.matrix[0].length / 2) | 0);
 
           player.canHold = false;
         }
@@ -756,7 +755,8 @@
         function updateScore() {
           document.getElementById("scoreDiv").innerText = player.score;
           const level = Math.floor(player.lines / 10) + 1;
-          dropInterval = Math.max(100, 1000 - (level - 1) * 100);
+          // SMOOTHER SPEED FORMULA: Start at 1000ms, multiply by 0.9 every level
+          dropInterval = 1000 * Math.pow(0.9, level - 1);
         }
 
         function resetGame() {
