@@ -8,7 +8,7 @@ export default defineConfig({
         main: resolve(__dirname, "index.html"),
         games: resolve(__dirname, "games/index.html"),
         tetris: resolve(__dirname, "games/tetris/index.html"),
-        flappy: resolve(__dirname, "games/flappy-bird/index.html"),
+        flappy: resolve(__dirname, "games/pong/index.html"),
       },
     },
   },

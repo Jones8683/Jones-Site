@@ -592,3 +592,13 @@ a.repo-link:hover {
     padding: 0 20px;
   }
 }
+
+.pong-btn {
+  background: rgba(0, 162, 255, 0.05);
+  color: #00a2ff;
+}
+
+.pong-btn:hover {
+  background: #00a2ff;
+  color: white;
+}
