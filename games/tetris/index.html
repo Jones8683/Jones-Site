@@ -720,7 +720,6 @@
 
           drawPreview(holdCtx, player.hold);
 
-          // RESET POSITION TO TOP CENTER
           player.pos.y = 0;
           player.pos.x =
             ((arena[0].length / 2) | 0) - ((player.matrix[0].length / 2) | 0);
@@ -754,9 +753,9 @@
 
         function updateScore() {
           document.getElementById("scoreDiv").innerText = player.score;
-          const level = Math.floor(player.lines / 10) + 1;
-          // SMOOTHER SPEED FORMULA: Start at 1000ms, multiply by 0.9 every level
-          dropInterval = 1000 * Math.pow(0.9, level - 1);
+          const level = Math.floor(player.lines / 8) + 1;
+          dropInterval = 1000 * Math.pow(0.75, level - 1);
+          console.log(dropInterval + "ms");
         }
 
         function resetGame() {
