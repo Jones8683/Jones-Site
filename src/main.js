@@ -1,25 +1,10 @@
-class HeaderComponent extends HTMLElement {
-  constructor() {
-    super();
-  }
+import { createApp } from "vue";
+import App from "./App.vue";
+import router from "./router";
+import "./assets/main.css";
 
-  connectedCallback() {
-    let lastScrollY = window.scrollY;
+const app = createApp(App);
 
-    this.classList.toggle("minimized", lastScrollY > 20);
+app.use(router);
 
-    window.addEventListener("scroll", () => {
-      const currentScrollY = window.scrollY;
-
-      this.classList.toggle("minimized", currentScrollY > 20);
-
-      this.dataset.show = (
-        currentScrollY < 350 || currentScrollY < lastScrollY
-      ).toString();
-
-      lastScrollY = currentScrollY;
-    });
-  }
-}
-
-customElements.define("header-component", HeaderComponent);
+app.mount("#app");

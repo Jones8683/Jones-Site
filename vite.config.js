@@ -1,15 +1,14 @@
-import { resolve } from "path";
+import { fileURLToPath, URL } from "node:url";
+
 import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import vueDevTools from "vite-plugin-vue-devtools";
 
 export default defineConfig({
-  build: {
-    rollupOptions: {
-      input: {
-        main: resolve(__dirname, "index.html"),
-        games: resolve(__dirname, "games/index.html"),
-        tetris: resolve(__dirname, "games/tetris/index.html"),
-        flappy: resolve(__dirname, "games/pong/index.html"),
-      },
+  plugins: [vue(), vueDevTools()],
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
   },
 });
