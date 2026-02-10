@@ -262,10 +262,10 @@
           <h1
             class="name-title"
             style="
-              font-size: 24px;
-              margin-bottom: 24px;
-              letter-spacing: -2px;
-              margin-top: 40px;
+              font-size: 32px;
+              margin-bottom: 16px;
+              letter-spacing: -1px;
+              margin-top: 60px;
               width: 100%;
             "
           >
@@ -275,8 +275,7 @@
             href="/games/"
             class="repo-link"
             style="
-              margin-top: 20px;
-              font-size: 16px;
+              font-size: 14px;
               display: inline-block;
               color: lightskyblue;
               text-decoration: none;
@@ -387,8 +386,8 @@
         const ball = {
           x: 350,
           y: 250,
-          dx: 3,
-          dy: 3,
+          dx: 0,
+          dy: 0,
           speed: 4,
           baseSpeed: 4,
         };
@@ -409,16 +408,12 @@
           gameMode = mode;
           leftPaddle.score = 0;
           rightPaddle.score = 0;
-
           startScreen.style.display = "none";
           gameOverMsg.style.display = "none";
           pauseMsg.style.display = "none";
-
           scoreDiv.innerText = "0 - 0";
-
           isRunning = true;
           isPaused = false;
-
           resetPositions();
           gameLoop();
         }
@@ -429,17 +424,14 @@
           ball.speed = ball.baseSpeed;
           ball.dx = 0;
           ball.dy = 0;
-
           leftPaddle.y = canvas.height / 2 - PADDLE_H / 2;
           rightPaddle.y = canvas.height / 2 - PADDLE_H / 2;
-
           isResetting = true;
-
           setTimeout(() => {
             if (!isRunning) return;
             isResetting = false;
             ball.dx = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
-            ball.dy = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
+            ball.dy = (Math.random() > 0.5 ? 0.5 : -0.5) * ball.speed;
           }, 1000);
         }
 
@@ -454,11 +446,8 @@
 
           if (gameMode === "cpu") {
             let center = leftPaddle.y + PADDLE_H / 2;
-            if (center < ball.y - 10) {
-              leftPaddle.y += leftPaddle.aiSpeed;
-            } else if (center > ball.y + 10) {
-              leftPaddle.y -= leftPaddle.aiSpeed;
-            }
+            if (center < ball.y - 10) leftPaddle.y += leftPaddle.aiSpeed;
+            else if (center > ball.y + 10) leftPaddle.y -= leftPaddle.aiSpeed;
           } else {
             leftPaddle.y += leftPaddle.dy;
           }
@@ -477,21 +466,27 @@
             ball.y += ball.dy;
           }
 
-          if (ball.y - BALL_SIZE < 0 || ball.y + BALL_SIZE > canvas.height) {
+          if (ball.y - BALL_SIZE < 0) {
+            ball.y = BALL_SIZE;
+            ball.dy *= -1;
+          } else if (ball.y + BALL_SIZE > canvas.height) {
+            ball.y = canvas.height - BALL_SIZE;
             ball.dy *= -1;
           }
 
           let paddle = ball.x < canvas.width / 2 ? leftPaddle : rightPaddle;
 
           if (collision(ball, paddle)) {
+            if (paddle === leftPaddle)
+              ball.x = leftPaddle.x + PADDLE_W + BALL_SIZE;
+            else ball.x = rightPaddle.x - BALL_SIZE;
+
             let collidePoint = ball.y - (paddle.y + PADDLE_H / 2);
             collidePoint = collidePoint / (PADDLE_H / 2);
-
             let angleRad = (Math.PI / 4) * collidePoint;
             let direction = ball.x < canvas.width / 2 ? 1 : -1;
 
             ball.speed += 0.5;
-
             ball.dx = direction * ball.speed * Math.cos(angleRad);
             ball.dy = ball.speed * Math.sin(angleRad);
           }
@@ -513,7 +508,6 @@
           if (leftPaddle.score >= WIN_SCORE || rightPaddle.score >= WIN_SCORE) {
             isRunning = false;
             let winnerName = "";
-
             if (gameMode === "cpu") {
               winnerName =
                 rightPaddle.score >= WIN_SCORE ? "YOU WIN!" : "COMPUTER WINS!";
@@ -523,7 +517,6 @@
                   ? "LEFT PLAYER WINS!"
                   : "RIGHT PLAYER WINS!";
             }
-
             winnerNameDiv.innerText = winnerName;
             gameOverMsg.style.display = "flex";
           }
@@ -541,22 +534,17 @@
         function draw() {
           ctx.fillStyle = "#0d0d0d";
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-
           ctx.fillStyle = "#333";
           for (let i = 0; i < canvas.height; i += 30) {
             ctx.fillRect(canvas.width / 2 - 1, i, 2, 20);
           }
-
           ctx.fillStyle = "white";
-
           ctx.beginPath();
           ctx.roundRect(leftPaddle.x, leftPaddle.y, PADDLE_W, PADDLE_H, 4);
           ctx.fill();
-
           ctx.beginPath();
           ctx.roundRect(rightPaddle.x, rightPaddle.y, PADDLE_W, PADDLE_H, 4);
           ctx.fill();
-
           ctx.beginPath();
           ctx.arc(ball.x, ball.y, BALL_SIZE, 0, Math.PI * 2);
           ctx.fill();
@@ -573,9 +561,8 @@
         window.addEventListener(
           "keydown",
           function (e) {
-            if (["ArrowUp", "ArrowDown", "Space"].indexOf(e.code) > -1) {
+            if (["ArrowUp", "ArrowDown", "Space"].indexOf(e.code) > -1)
               e.preventDefault();
-            }
           },
           false,
         );
@@ -585,21 +572,15 @@
             togglePause();
             return;
           }
-
           if (e.key === "w" || e.key === "W") leftPaddle.dy = -leftPaddle.speed;
           if (e.key === "s" || e.key === "S") leftPaddle.dy = leftPaddle.speed;
-
           if (e.key === "ArrowUp") rightPaddle.dy = -rightPaddle.speed;
           if (e.key === "ArrowDown") rightPaddle.dy = rightPaddle.speed;
         });
 
         document.addEventListener("keyup", (e) => {
-          if (["w", "W", "s", "S"].includes(e.key)) {
-            leftPaddle.dy = 0;
-          }
-          if (["ArrowUp", "ArrowDown"].includes(e.key)) {
-            rightPaddle.dy = 0;
-          }
+          if (["w", "W", "s", "S"].includes(e.key)) leftPaddle.dy = 0;
+          if (["ArrowUp", "ArrowDown"].includes(e.key)) rightPaddle.dy = 0;
         });
 
         draw();
