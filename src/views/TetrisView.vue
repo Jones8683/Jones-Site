@@ -418,7 +418,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="pong-container">
+  <div class="tetris-wrapper">
     <div class="mobile-msg">
       <div class="content-wrap">
         <h1
