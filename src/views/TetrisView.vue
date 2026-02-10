@@ -356,7 +356,7 @@ function updateScore() {
   const el = document.getElementById("scoreDiv");
   if (el) el.innerText = player.score;
   const level = Math.floor(player.lines / 10) + 1;
-  dropInterval = 1000 * Math.pow(0.7, level - 1);
+  dropInterval = 1000 * Math.pow(0.8, level - 1);
 }
 
 function resetGame() {
