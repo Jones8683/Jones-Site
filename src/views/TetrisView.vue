@@ -418,16 +418,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="tetris-wrapper">
+  <div class="pong-container">
     <div class="mobile-msg">
       <div class="content-wrap">
         <h1
           class="name-title"
           style="
-            font-size: 24px;
-            margin-bottom: 24px;
-            letter-spacing: -2px;
-            margin-top: 40px;
+            font-size: 32px;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+            margin-top: 60px;
             width: 100%;
           "
         >
@@ -436,10 +436,14 @@ onUnmounted(() => {
         <RouterLink
           to="/games"
           class="repo-link"
-          style="margin-top: 40px; font-size: 16px; display: inline-block"
+          style="
+            font-size: 14px;
+            display: inline-block;
+            color: lightskyblue;
+            text-decoration: none;
+          "
+          >← Back to games</RouterLink
         >
-          ← Back to games
-        </RouterLink>
       </div>
     </div>
 
