@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, onUnmounted } from "vue";
+import { useStorage } from "@vueuse/core";
 
 let canvas, ctx, nextCtx, holdCtx;
 let animationId = null;
@@ -16,6 +17,7 @@ const colors = [
 ];
 
 const arena = createMatrix(12, 20);
+const highScore = useStorage("tetris-best-score", 0);
 
 const player = {
   pos: { x: 0, y: 0 },
@@ -276,6 +278,9 @@ function playerReset() {
     ((arena[0].length / 2) | 0) - ((player.matrix[0].length / 2) | 0);
   if (collide(arena, player)) {
     isGameOver = true;
+    if (player.score > highScore.value) {
+      highScore.value = player.score;
+    }
     const gameOverEl = document.getElementById("gameOverMsg");
     if (gameOverEl) gameOverEl.style.display = "flex";
   }
@@ -500,6 +505,32 @@ onUnmounted(() => {
           <div class="info-box score-box">
             <div class="label score-label">Score</div>
             <div class="value score-value" id="scoreDiv">0</div>
+
+            <div
+              style="
+                width: 100%;
+                height: 1px;
+                background: rgba(255, 255, 255, 0.1);
+                margin: 8px 0;
+              "
+            ></div>
+
+            <div
+              class="label"
+              style="font-size: 11px; color: #94a3b8; margin-bottom: 2px"
+            >
+              HIGH SCORE
+            </div>
+            <div
+              class="value"
+              style="
+                font-size: 24px;
+                color: #ffd700;
+                text-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+              "
+            >
+              {{ highScore }}
+            </div>
           </div>
           <div class="controls-container">
             <div class="control-item">

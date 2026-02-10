@@ -12,9 +12,16 @@ let isPaused = false;
 let isRunning = false;
 let isResetting = false;
 
-const leftPaddle = { x: 20, y: 210, score: 0, dy: 0, speed: 7, aiSpeed: 6 };
-const rightPaddle = { x: 668, y: 210, score: 0, dy: 0, speed: 7 };
+const leftPaddle = { x: 20, y: 210, score: 0, speed: 7, aiSpeed: 6.5 };
+const rightPaddle = { x: 668, y: 210, score: 0, speed: 7 };
 const ball = { x: 350, y: 250, dx: 0, dy: 0, speed: 4, baseSpeed: 4 };
+
+const keys = {
+  w: false,
+  s: false,
+  ArrowUp: false,
+  ArrowDown: false,
+};
 
 function showStartScreen() {
   isRunning = false;
@@ -37,6 +44,12 @@ function initGame(mode) {
   document.getElementById("scoreDiv").innerText = "0 - 0";
   isRunning = true;
   isPaused = false;
+
+  keys.w = false;
+  keys.s = false;
+  keys.ArrowUp = false;
+  keys.ArrowDown = false;
+
   resetPositions();
   gameLoop();
 }
@@ -55,7 +68,9 @@ function resetPositions() {
     if (!isRunning) return;
     isResetting = false;
     ball.dx = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
-    ball.dy = (Math.random() > 0.5 ? 0.5 : -0.5) * ball.speed;
+    let randomY = Math.random() * 2 - 1;
+    if (Math.abs(randomY) < 0.2) randomY = randomY < 0 ? -0.5 : 0.5;
+    ball.dy = randomY * ball.speed;
   }, 1000);
 }
 
@@ -70,17 +85,24 @@ function togglePause() {
 function update() {
   if (isPaused) return;
 
+  if (keys.ArrowUp) rightPaddle.y -= rightPaddle.speed;
+  if (keys.ArrowDown) rightPaddle.y += rightPaddle.speed;
+
   if (gameMode === "cpu") {
-    let center = leftPaddle.y + PADDLE_H / 2;
-    if (center < ball.y - 10) leftPaddle.y += leftPaddle.aiSpeed;
-    else if (center > ball.y + 10) leftPaddle.y -= leftPaddle.aiSpeed;
+    let targetY = ball.y - PADDLE_H / 2;
+    let diff = targetY - leftPaddle.y;
+    let move = diff * 0.15;
+
+    if (move > leftPaddle.aiSpeed) move = leftPaddle.aiSpeed;
+    if (move < -leftPaddle.aiSpeed) move = -leftPaddle.aiSpeed;
+
+    leftPaddle.y += move;
   } else {
-    leftPaddle.y += leftPaddle.dy;
+    if (keys.w) leftPaddle.y -= leftPaddle.speed;
+    if (keys.s) leftPaddle.y += leftPaddle.speed;
   }
 
   leftPaddle.y = Math.max(0, Math.min(canvas.height - PADDLE_H, leftPaddle.y));
-
-  rightPaddle.y += rightPaddle.dy;
   rightPaddle.y = Math.max(
     0,
     Math.min(canvas.height - PADDLE_H, rightPaddle.y),
@@ -91,23 +113,35 @@ function update() {
     ball.y += ball.dy;
   }
 
-  if (ball.y - BALL_SIZE < 0 || ball.y + BALL_SIZE > canvas.height) {
+  if (ball.y - BALL_SIZE <= 0 && ball.dy < 0) {
     ball.dy *= -1;
-    ball.y = ball.y < 0 ? BALL_SIZE : canvas.height - BALL_SIZE;
+  } else if (ball.y + BALL_SIZE >= canvas.height && ball.dy > 0) {
+    ball.dy *= -1;
   }
+
+  if (ball.y < -20) ball.y = BALL_SIZE;
+  if (ball.y > canvas.height + 20) ball.y = canvas.height - BALL_SIZE;
 
   let paddle = ball.x < canvas.width / 2 ? leftPaddle : rightPaddle;
   if (collision(ball, paddle)) {
-    if (paddle === leftPaddle) ball.x = leftPaddle.x + PADDLE_W + BALL_SIZE;
-    else ball.x = rightPaddle.x - BALL_SIZE;
-
     let collidePoint = (ball.y - (paddle.y + PADDLE_H / 2)) / (PADDLE_H / 2);
+
+    if (collidePoint > 0.9) collidePoint = 0.9;
+    if (collidePoint < -0.9) collidePoint = -0.9;
+
     let angleRad = (Math.PI / 4) * collidePoint;
     let direction = ball.x < canvas.width / 2 ? 1 : -1;
 
     ball.speed += 0.5;
     ball.dx = direction * ball.speed * Math.cos(angleRad);
     ball.dy = ball.speed * Math.sin(angleRad);
+
+    if (Math.abs(ball.dy) < 0.5) {
+      ball.dy = ball.dy < 0 ? -1 : 1;
+    }
+
+    if (paddle === leftPaddle) ball.x = leftPaddle.x + PADDLE_W + BALL_SIZE + 1;
+    else ball.x = rightPaddle.x - BALL_SIZE - 1;
   }
 
   if (ball.x < 0) {
@@ -134,9 +168,9 @@ function checkWin() {
       name = rightPaddle.score >= WIN_SCORE ? "YOU WIN!" : "COMPUTER WINS!";
     } else {
       name =
-        leftPaddle.score >= WIN_SCORE
-          ? "LEFT PLAYER WINS!"
-          : "RIGHT PLAYER WINS!";
+        rightPaddle.score >= WIN_SCORE
+          ? "RIGHT PLAYER WINS!"
+          : "LEFT PLAYER WINS!";
     }
     document.getElementById("winnerName").innerText = name;
     document.getElementById("gameOverMsg").style.display = "flex";
@@ -186,15 +220,17 @@ const handleKeyDown = (e) => {
     return;
   }
 
-  if (e.key.toLowerCase() === "w") leftPaddle.dy = -leftPaddle.speed;
-  if (e.key.toLowerCase() === "s") leftPaddle.dy = leftPaddle.speed;
-  if (e.key === "ArrowUp") rightPaddle.dy = -rightPaddle.speed;
-  if (e.key === "ArrowDown") rightPaddle.dy = rightPaddle.speed;
+  if (e.key.toLowerCase() === "w") keys.w = true;
+  if (e.key.toLowerCase() === "s") keys.s = true;
+  if (e.key === "ArrowUp") keys.ArrowUp = true;
+  if (e.key === "ArrowDown") keys.ArrowDown = true;
 };
 
 const handleKeyUp = (e) => {
-  if (["w", "W", "s", "S"].includes(e.key)) leftPaddle.dy = 0;
-  if (["ArrowUp", "ArrowDown"].includes(e.key)) rightPaddle.dy = 0;
+  if (e.key.toLowerCase() === "w") keys.w = false;
+  if (e.key.toLowerCase() === "s") keys.s = false;
+  if (e.key === "ArrowUp") keys.ArrowUp = false;
+  if (e.key === "ArrowDown") keys.ArrowDown = false;
 };
 
 onMounted(() => {
