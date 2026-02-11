@@ -48,6 +48,16 @@ function initGrid(diff) {
   );
 }
 
+// Function to handle returning to the start state and clearing the board
+function resetToStart() {
+  gameStatus.value = "start";
+  stopTimer();
+  timer.value = 0;
+  flagsPlaced.value = 0;
+  isFirstClick = true;
+  initGrid(currentDiff.value); // This removes the "background" game progress
+}
+
 function initGame(difficultyKey) {
   currentDiff.value = DIFFICULTIES[difficultyKey];
   gameStatus.value = "playing";
@@ -174,7 +184,7 @@ function stopTimer() {
 }
 
 const handleKeydown = (e) => {
-  if (e.key.toLowerCase() === "r") gameStatus.value = "start";
+  if (e.key.toLowerCase() === "r") resetToStart(); // Fixed to clear background
   if (e.key.toLowerCase() === "p") togglePause();
 };
 
@@ -233,9 +243,9 @@ const gridStyle = computed(() => ({
             <button
               class="retry-btn"
               style="margin-top: 15px"
-              @click="gameStatus = 'start'"
+              @click="resetToStart"
             >
-              MENU
+              RESTART
             </button>
           </div>
 
@@ -360,7 +370,7 @@ const gridStyle = computed(() => ({
   text-align: left;
 }
 .game-title {
-  font-size: 48px; /* Adjusted so word fits sidebar width */
+  font-size: 48px;
   margin: 0 0 10px 0;
   letter-spacing: -2px;
   font-weight: 900;
