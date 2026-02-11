@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import GamesView from "../views/GamesView.vue";
 import PongView from "../views/PongView.vue";
 import TetrisView from "../views/TetrisView.vue";
+import MinesweeperView from "../views/MinesweeperView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 
 const router = createRouter({
@@ -31,6 +32,12 @@ const router = createRouter({
       name: "pong",
       component: PongView,
       meta: { title: "Pong" },
+    },
+    {
+      path: "/games/minesweeper",
+      name: "minesweeper",
+      component: MinesweeperView,
+      meta: { title: "Minesweeper" },
     },
     {
       path: "/:pathMatch(.*)*",

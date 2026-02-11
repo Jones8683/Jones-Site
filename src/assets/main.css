@@ -43,6 +43,12 @@ body {
   flex-direction: column;
 }
 
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
 html::before {
   content: "";
   position: fixed;
@@ -87,6 +93,14 @@ html::before {
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 18px;
+}
+
+.main-header[data-show="false"] {
+  transform: translate(-50%, -120px);
+}
+
+.main-header[data-show="true"] {
+  transform: translate(-50%, 0);
 }
 
 .nav-container {
@@ -139,58 +153,6 @@ html::before {
 
 .nav-name-link {
   text-decoration: none !important;
-}
-
-@media (max-width: 650px) {
-  .nav-name {
-    display: none !important;
-  }
-
-  .nav-container {
-    padding: 10px 16px !important;
-    justify-content: space-between !important;
-  }
-
-  .nav-left {
-    gap: 0 !important;
-  }
-
-  .glass-nav {
-    gap: 8px !important;
-  }
-
-  .glass-btn {
-    padding: 8px 14px !important;
-    font-size: 0.8rem !important;
-    background: rgba(255, 255, 255, 0.08) !important;
-  }
-
-  .nav-right {
-    gap: 12px !important;
-  }
-
-  .nav-icon.discord-icon svg,
-  .nav-icon.github-icon svg {
-    width: 22px !important;
-    height: 22px !important;
-  }
-}
-
-.nav-left a,
-.nav-name-link,
-.nav-item,
-.nav-link-item,
-.repo-btn {
-  text-decoration: none !important;
-}
-
-.nav-name-link:hover,
-.nav-item:hover,
-.nav-link-item:hover {
-  text-decoration: none !important;
-}
-
-.nav-name-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -243,6 +205,53 @@ html::before {
   width: 23px;
   height: 23px;
   display: block;
+}
+
+.nav-left a,
+.nav-item,
+.nav-link-item,
+.repo-btn {
+  text-decoration: none !important;
+}
+
+.nav-item:hover,
+.nav-link-item:hover {
+  text-decoration: none !important;
+}
+
+@media (max-width: 650px) {
+  .nav-name {
+    display: none !important;
+  }
+
+  .nav-container {
+    padding: 10px 16px !important;
+    justify-content: space-between !important;
+  }
+
+  .nav-left {
+    gap: 0 !important;
+  }
+
+  .glass-nav {
+    gap: 8px !important;
+  }
+
+  .glass-btn {
+    padding: 8px 14px !important;
+    font-size: 0.8rem !important;
+    background: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .nav-right {
+    gap: 12px !important;
+  }
+
+  .nav-icon.discord-icon svg,
+  .nav-icon.github-icon svg {
+    width: 22px !important;
+    height: 22px !important;
+  }
 }
 
 main {
@@ -358,60 +367,6 @@ main {
   letter-spacing: 0.02em;
 }
 
-@media (max-width: 720px) {
-  .about-section {
-    grid-template-columns: 1fr;
-    text-align: center;
-  }
-
-  .about-title span {
-    letter-spacing: 0.04em;
-  }
-}
-
-.main-footer {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-bottom: 20px;
-}
-
-.footer-line {
-  width: 90%;
-  max-width: 1200px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.1);
-  margin-bottom: 20px;
-}
-
-.main-footer p {
-  color: #64748b;
-  font-size: 0.85rem;
-  letter-spacing: 0.5px;
-}
-
-a.repo-link {
-  color: lightskyblue;
-  text-decoration: none;
-}
-
-a.repo-link:hover {
-  text-decoration: underline;
-}
-
-.main-footer {
-  margin-top: 30px;
-}
-
-.main-header[data-show="false"] {
-  transform: translate(-50%, -120px);
-}
-
-.main-header[data-show="true"] {
-  transform: translate(-50%, 0);
-}
-
 .about-section .repo-button-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -458,12 +413,6 @@ a.repo-link:hover {
   letter-spacing: 0.01em;
 }
 
-@media (max-width: 650px) {
-  .about-section .repo-button-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .about-section .repo-info {
   display: flex;
   flex-direction: column;
@@ -477,6 +426,23 @@ a.repo-link:hover {
   line-height: 1.2 !important;
 }
 
+@media (max-width: 720px) {
+  .about-section {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .about-title span {
+    letter-spacing: 0.04em;
+  }
+}
+
+@media (max-width: 650px) {
+  .about-section .repo-button-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .arcade-subtitle {
   color: #94a3b8;
   font-size: 1.05rem;
@@ -486,10 +452,10 @@ a.repo-link:hover {
 
 .arcade-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   width: 100%;
-  max-width: 600px;
+  max-width: 900px;
   margin: 0 auto;
 }
 
@@ -562,6 +528,26 @@ a.repo-link:hover {
   color: white;
 }
 
+.pong-btn {
+  background: rgba(0, 162, 255, 0.05);
+  color: #00a2ff;
+}
+
+.pong-btn:hover {
+  background: #00a2ff;
+  color: white;
+}
+
+.mines-btn {
+  background: rgba(255, 215, 0, 0.05);
+  color: #ffd700;
+}
+
+.mines-btn:hover {
+  background: #ffd700;
+  color: black;
+}
+
 .flappy-btn {
   background: rgba(255, 165, 2, 0.05);
   color: #ffa502;
@@ -570,6 +556,38 @@ a.repo-link:hover {
 .flappy-btn:hover {
   background: #ffa502;
   color: white;
+}
+
+.main-footer {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 20px;
+  margin-top: 30px;
+}
+
+.footer-line {
+  width: 90%;
+  max-width: 1200px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+}
+
+.main-footer p {
+  color: #64748b;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+a.repo-link {
+  color: lightskyblue;
+  text-decoration: none;
+}
+
+a.repo-link:hover {
+  text-decoration: underline;
 }
 
 .mobile-msg {
@@ -591,20 +609,4 @@ a.repo-link:hover {
     text-align: center;
     padding: 0 20px;
   }
-}
-
-.pong-btn {
-  background: rgba(0, 162, 255, 0.05);
-  color: #00a2ff;
-}
-
-.pong-btn:hover {
-  background: #00a2ff;
-  color: white;
-}
-
-#app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }

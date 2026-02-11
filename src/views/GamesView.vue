@@ -39,6 +39,19 @@ import { RouterLink } from "vue-router";
           Play Now
         </RouterLink>
       </div>
+
+      <div class="arcade-card">
+        <div class="arcade-card-top">
+          <span class="arcade-icon">💣</span>
+          <h3 class="arcade-name">Minesweeper</h3>
+        </div>
+        <RouterLink
+          to="/games/minesweeper"
+          class="arcade-card-bottom mines-btn"
+        >
+          Play Now
+        </RouterLink>
+      </div>
     </div>
   </div>
 </template>
