@@ -12,7 +12,7 @@ let isPaused = false;
 let isRunning = false;
 let isResetting = false;
 
-const leftPaddle = { x: 20, y: 210, score: 0, speed: 7, aiSpeed: 6.5 };
+const leftPaddle = { x: 20, y: 210, score: 0, speed: 7, aiSpeed: 5.5 };
 const rightPaddle = { x: 668, y: 210, score: 0, speed: 7 };
 const ball = { x: 350, y: 250, dx: 0, dy: 0, speed: 4, baseSpeed: 4 };
 
