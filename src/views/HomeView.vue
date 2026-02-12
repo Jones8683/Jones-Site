@@ -41,9 +41,9 @@ import profilePic from "@/assets/github.png";
           experience for over 60,000 students across the world.
         </p>
         <p>
-          Beyond technology, I’m passionate about music — I play piano, enjoy
-          Star Wars, enjoy reading so many different types of books, and love
-          exploring games like Hollow Knight.
+          Beyond technology, I’m passionate about music, play piano, enjoy Star
+          Wars, love reading all kinds of books, and exploring games like Hollow
+          Knight.
         </p>
       </div>
     </section>
