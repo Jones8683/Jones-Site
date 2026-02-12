@@ -56,7 +56,7 @@ import { RouterLink } from "vue-router";
       <div class="arcade-card">
         <div class="arcade-card-top">
           <span class="arcade-icon">🪝</span>
-          <h3 class="arcade-name">StickMan Hook</h3>
+          <h3 class="arcade-name">Stickman Hook</h3>
         </div>
         <RouterLink
           to="/games/stickman-hook"
