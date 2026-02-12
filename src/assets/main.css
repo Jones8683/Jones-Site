@@ -453,7 +453,7 @@ main {
 .arcade-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 20px;
   width: 100%;
   max-width: 900px;
   margin: 0 auto;
@@ -558,13 +558,23 @@ main {
   color: white;
 }
 
+.hook-btn {
+  background: rgba(46, 213, 115, 0.05);
+  color: #2ed573;
+}
+
+.hook-btn:hover {
+  background: #2ed573;
+  color: white;
+}
+
 .main-footer {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-bottom: 20px;
-  margin-top: 30px;
+  margin-top: 40px;
 }
 
 .footer-line {
