@@ -48,14 +48,13 @@ function initGrid(diff) {
   );
 }
 
-// Function to handle returning to the start state and clearing the board
 function resetToStart() {
   gameStatus.value = "start";
   stopTimer();
   timer.value = 0;
   flagsPlaced.value = 0;
   isFirstClick = true;
-  initGrid(currentDiff.value); // This removes the "background" game progress
+  initGrid(currentDiff.value);
 }
 
 function initGame(difficultyKey) {
@@ -184,7 +183,7 @@ function stopTimer() {
 }
 
 const handleKeydown = (e) => {
-  if (e.key.toLowerCase() === "r") resetToStart(); // Fixed to clear background
+  if (e.key.toLowerCase() === "r") resetToStart();
   if (e.key.toLowerCase() === "p") togglePause();
 };
 
