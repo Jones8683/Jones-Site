@@ -40,6 +40,11 @@ import profilePic from "@/assets/github.png";
           >, a web extension for SEQTA that improves and reimagines user
           experience for over 60,000 students across the world.
         </p>
+        <p>
+          Beyond technology, I’m passionate about music — I play piano, enjoy
+          Star Wars, enjoy reading so many different types of books, and love
+          exploring games like Hollow Knight.
+        </p>
       </div>
     </section>
 
