@@ -452,11 +452,11 @@ main {
 
 .arcade-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 250px);
   gap: 21px;
   width: 100%;
   max-width: 900px;
-  margin: 0 auto;
+  justify-content: center;
 }
 
 @media (max-width: 600px) {
