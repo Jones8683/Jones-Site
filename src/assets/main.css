@@ -518,52 +518,42 @@ main {
   transition: all 0.3s ease;
 }
 
-.tetris-btn {
+.red-btn {
   background: rgba(255, 71, 87, 0.05);
   color: #ff4757;
 }
 
-.tetris-btn:hover {
+.red-btn:hover {
   background: #ff4757;
   color: white;
 }
 
-.pong-btn {
+.blue-btn {
   background: rgba(0, 162, 255, 0.05);
   color: #00a2ff;
 }
 
-.pong-btn:hover {
+.blue-btn:hover {
   background: #00a2ff;
   color: white;
 }
 
-.mines-btn {
+.yellow-btn {
   background: rgba(255, 215, 0, 0.05);
   color: #ffd700;
 }
 
-.mines-btn:hover {
+.yellow-btn:hover {
   background: #ffd700;
   color: black;
 }
 
-.flappy-btn {
-  background: rgba(255, 165, 2, 0.05);
-  color: #ffa502;
-}
-
-.flappy-btn:hover {
-  background: #ffa502;
-  color: white;
-}
-
-.hook-btn {
+.green-btn {
   background: rgba(46, 213, 115, 0.05);
   color: #2ed573;
 }
 
-.hook-btn:hover {
+.green-btn:hover {
   background: #2ed573;
   color: white;
 }

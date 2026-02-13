@@ -25,7 +25,7 @@ import { RouterLink } from "vue-router";
           <span class="arcade-icon">🧱</span>
           <h3 class="arcade-name">Tetris</h3>
         </div>
-        <RouterLink to="/games/tetris" class="arcade-card-bottom tetris-btn">
+        <RouterLink to="/games/tetris" class="arcade-card-bottom red-btn">
           Play Now
         </RouterLink>
       </div>
@@ -35,7 +35,7 @@ import { RouterLink } from "vue-router";
           <span class="arcade-icon">🏓</span>
           <h3 class="arcade-name">Pong</h3>
         </div>
-        <RouterLink to="/games/pong" class="arcade-card-bottom pong-btn">
+        <RouterLink to="/games/pong" class="arcade-card-bottom blue-btn">
           Play Now
         </RouterLink>
       </div>
@@ -47,7 +47,7 @@ import { RouterLink } from "vue-router";
         </div>
         <RouterLink
           to="/games/minesweeper"
-          class="arcade-card-bottom mines-btn"
+          class="arcade-card-bottom green-btn"
         >
           Play Now
         </RouterLink>
@@ -60,7 +60,7 @@ import { RouterLink } from "vue-router";
         </div>
         <RouterLink
           to="/games/stickman-hook"
-          class="arcade-card-bottom hook-btn"
+          class="arcade-card-bottom yellow-btn"
         >
           Play Now
         </RouterLink>
