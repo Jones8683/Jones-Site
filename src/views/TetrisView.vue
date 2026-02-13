@@ -40,7 +40,6 @@ const LOCK_DELAY_TIME = 500;
 const MAX_LOCK_MOVES = 15;
 let isLanded = false;
 
-// Custom Auto Repeat settings
 const DAS = 170;
 const ARR = 50;
 const SOFT_DROP_ARR = 30;
@@ -53,7 +52,7 @@ const keys = {
 let hardDropEffect = {
   active: false,
   alpha: 0,
-  trails: [], // Array of {x, y, h} for each column
+  trails: [],
 };
 
 let piecesBag = [];
@@ -126,25 +125,26 @@ function draw() {
 
   if (hardDropEffect.active && hardDropEffect.alpha > 0) {
     hardDropEffect.trails.forEach((trail) => {
-      // Create a gradient for each trail column
       const g = ctx.createLinearGradient(0, trail.y, 0, trail.y + trail.h);
-      
-      // Calculate how much of the trail is 3 blocks
+
       let fadeStop = 0;
       if (trail.h > 0) {
         fadeStop = Math.min(3, trail.h) / trail.h;
       }
 
-      g.addColorStop(0, `rgba(255, 255, 255, 0)`); // Start transparent at valid top
+      g.addColorStop(0, `rgba(255, 255, 255, 0)`);
       if (fadeStop > 0 && fadeStop < 1) {
-          g.addColorStop(fadeStop, `rgba(255, 255, 255, ${hardDropEffect.alpha})`);
+        g.addColorStop(
+          fadeStop,
+          `rgba(255, 255, 255, ${hardDropEffect.alpha})`,
+        );
       }
       g.addColorStop(1, `rgba(255, 255, 255, ${hardDropEffect.alpha})`);
 
       ctx.fillStyle = g;
       ctx.fillRect(trail.x, trail.y, 1, trail.h);
     });
-    
+
     hardDropEffect.alpha -= 0.08;
     if (hardDropEffect.alpha <= 0) hardDropEffect.active = false;
   }
@@ -176,14 +176,7 @@ function drawMatrix(matrix, offset, context, isGhost = false) {
 
         if (isLanded && context === ctx && matrix === player.matrix) {
           const now = Date.now();
-          // Sine wave between 0 and 1
           const intensity = (Math.sin(now / 50) + 1) / 2;
-          // Interpolate between normal color and a darker version (dimming)
-          // Actually, let's just use globalAlpha or an overlay for simplicity
-          // But effectively, user wants "pulsing dimming".
-          // Let's overlay a semi-transparent white or black.
-          // "Dimmed" implies darker.
-          // Let's modify the fillStyle execution order.
         }
 
         context.fillStyle = fillStyle;
@@ -261,10 +254,10 @@ function playerDrop() {
   player.pos.y++;
   if (collide(arena, player)) {
     player.pos.y--;
-    return false; // Did not drop
+    return false;
   }
   dropCounter = 0;
-  return true; // Successfully dropped
+  return true;
 }
 
 function playerLock() {
@@ -298,17 +291,17 @@ function getPieceBounds(matrix) {
 function playerHardDrop() {
   const startY = player.pos.y;
   let ghostY = startY;
-  while (!collide(arena, { ...player, pos: { x: player.pos.x, y: ghostY + 1 } })) {
+  while (
+    !collide(arena, { ...player, pos: { x: player.pos.x, y: ghostY + 1 } })
+  ) {
     ghostY++;
   }
-  
+
   const trails = [];
   const matrix = player.matrix;
   const pieceX = player.pos.x;
-  
-  // Create a trail for each column in the piece
+
   for (let x = 0; x < matrix[0].length; x++) {
-    // Find highest block in this column to determine where trail stops
     let highestBlockY = -1;
     for (let y = 0; y < matrix.length; y++) {
       if (matrix[y][x] !== 0) {
@@ -316,27 +309,25 @@ function playerHardDrop() {
         break;
       }
     }
-    
+
     if (highestBlockY !== -1) {
-      // Trail segment for this column
       trails.push({
         x: pieceX + x,
-        y: startY + highestBlockY, // Start exactly at the block's initial top
-        h: ghostY - startY // Height is the fall distance
+        y: startY + highestBlockY,
+        h: ghostY - startY,
       });
     }
   }
 
-  // Calculate score based on drop distance: 2 points per line dropped
   const dropDistance = ghostY - startY;
   player.score += dropDistance * 2;
 
   player.pos.y = ghostY;
-  
+
   hardDropEffect = {
     active: true,
     alpha: 0.4,
-    trails: trails
+    trails: trails,
   };
 
   lockDelayCounter = 0;
