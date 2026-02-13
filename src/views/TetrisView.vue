@@ -40,13 +40,20 @@ const LOCK_DELAY_TIME = 500;
 const MAX_LOCK_MOVES = 15;
 let isLanded = false;
 
+// Custom Auto Repeat settings
+const DAS = 170;
+const ARR = 50;
+const SOFT_DROP_ARR = 30;
+const keys = {
+  37: { down: false, timer: 0 },
+  39: { down: false, timer: 0 },
+  40: { down: false, timer: 0 },
+};
+
 let hardDropEffect = {
   active: false,
-  x: 0,
-  y: 0,
-  w: 0,
-  h: 0,
   alpha: 0,
+  trails: [], // Array of {x, y, h} for each column
 };
 
 let piecesBag = [];
@@ -118,13 +125,26 @@ function draw() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (hardDropEffect.active && hardDropEffect.alpha > 0) {
-    ctx.fillStyle = `rgba(255, 255, 255, ${hardDropEffect.alpha})`;
-    ctx.fillRect(
-      hardDropEffect.x,
-      hardDropEffect.y,
-      hardDropEffect.w,
-      hardDropEffect.h,
-    );
+    hardDropEffect.trails.forEach((trail) => {
+      // Create a gradient for each trail column
+      const g = ctx.createLinearGradient(0, trail.y, 0, trail.y + trail.h);
+      
+      // Calculate how much of the trail is 3 blocks
+      let fadeStop = 0;
+      if (trail.h > 0) {
+        fadeStop = Math.min(3, trail.h) / trail.h;
+      }
+
+      g.addColorStop(0, `rgba(255, 255, 255, 0)`); // Start transparent at valid top
+      if (fadeStop > 0 && fadeStop < 1) {
+          g.addColorStop(fadeStop, `rgba(255, 255, 255, ${hardDropEffect.alpha})`);
+      }
+      g.addColorStop(1, `rgba(255, 255, 255, ${hardDropEffect.alpha})`);
+
+      ctx.fillStyle = g;
+      ctx.fillRect(trail.x, trail.y, 1, trail.h);
+    });
+    
     hardDropEffect.alpha -= 0.08;
     if (hardDropEffect.alpha <= 0) hardDropEffect.active = false;
   }
@@ -241,9 +261,10 @@ function playerDrop() {
   player.pos.y++;
   if (collide(arena, player)) {
     player.pos.y--;
-    return;
+    return false; // Did not drop
   }
   dropCounter = 0;
+  return true; // Successfully dropped
 }
 
 function playerLock() {
@@ -276,19 +297,46 @@ function getPieceBounds(matrix) {
 
 function playerHardDrop() {
   const startY = player.pos.y;
-  while (!collide(arena, player)) {
-    player.pos.y++;
+  let ghostY = startY;
+  while (!collide(arena, { ...player, pos: { x: player.pos.x, y: ghostY + 1 } })) {
+    ghostY++;
   }
-  player.pos.y--;
-  player.score += 34;
-  const bounds = getPieceBounds(player.matrix);
+  
+  const trails = [];
+  const matrix = player.matrix;
+  const pieceX = player.pos.x;
+  
+  // Create a trail for each column in the piece
+  for (let x = 0; x < matrix[0].length; x++) {
+    // Find highest block in this column to determine where trail stops
+    let highestBlockY = -1;
+    for (let y = 0; y < matrix.length; y++) {
+      if (matrix[y][x] !== 0) {
+        highestBlockY = y;
+        break;
+      }
+    }
+    
+    if (highestBlockY !== -1) {
+      // Trail segment for this column
+      trails.push({
+        x: pieceX + x,
+        y: startY + highestBlockY, // Start exactly at the block's initial top
+        h: ghostY - startY // Height is the fall distance
+      });
+    }
+  }
+
+  // Calculate score based on drop distance: 2 points per line dropped
+  const dropDistance = ghostY - startY;
+  player.score += dropDistance * 2;
+
+  player.pos.y = ghostY;
+  
   hardDropEffect = {
     active: true,
-    x: player.pos.x + bounds.xOffset,
-    y: startY,
-    w: bounds.width,
-    h: player.pos.y - startY + player.matrix.length,
     alpha: 0.4,
+    trails: trails
   };
 
   lockDelayCounter = 0;
@@ -405,6 +453,35 @@ function update(time = 0) {
   const deltaTime = time - lastTime;
   lastTime = time;
 
+  if (keys[37].down) {
+    keys[37].timer += deltaTime;
+    if (keys[37].timer > DAS) {
+      while (keys[37].timer > DAS + ARR) {
+        playerMove(-1);
+        keys[37].timer -= ARR;
+      }
+    }
+  }
+  if (keys[39].down) {
+    keys[39].timer += deltaTime;
+    if (keys[39].timer > DAS) {
+      while (keys[39].timer > DAS + ARR) {
+        playerMove(1);
+        keys[39].timer -= ARR;
+      }
+    }
+  }
+  if (keys[40].down) {
+    keys[40].timer += deltaTime;
+    while (keys[40].timer > SOFT_DROP_ARR) {
+      if (playerDrop()) {
+        player.score += 1;
+        updateScore();
+      }
+      keys[40].timer -= SOFT_DROP_ARR;
+    }
+  }
+
   dropCounter += deltaTime;
   if (dropCounter > dropInterval) {
     playerDrop();
@@ -467,20 +544,38 @@ const handleKeydown = (event) => {
     return;
   }
   if (isPaused) return;
-  if (event.keyCode === 37) {
-    playerMove(-1);
-  } else if (event.keyCode === 39) {
-    playerMove(1);
-  } else if (event.keyCode === 40) {
-    playerDrop();
-    player.score += 2;
-    updateScore();
-  } else if (event.keyCode === 38) {
+
+  if (event.keyCode === 37 || event.keyCode === 39 || event.keyCode === 40) {
+    if (event.repeat) return;
+
+    if (keys[event.keyCode]) {
+      keys[event.keyCode].down = true;
+      keys[event.keyCode].timer = 0;
+      if (event.keyCode === 37) playerMove(-1);
+      if (event.keyCode === 39) playerMove(1);
+      if (event.keyCode === 40) {
+        if (playerDrop()) {
+          player.score += 1;
+          updateScore();
+        }
+      }
+    }
+    return;
+  }
+
+  if (event.keyCode === 38) {
     playerRotate(1);
   } else if (event.keyCode === 32) {
     playerHardDrop();
   } else if (event.keyCode === 67) {
     playerHold();
+  }
+};
+
+const handleKeyup = (event) => {
+  if (keys[event.keyCode]) {
+    keys[event.keyCode].down = false;
+    keys[event.keyCode].timer = 0;
   }
 };
 
@@ -493,6 +588,7 @@ onMounted(() => {
   nextCtx.scale(25, 25);
   holdCtx.scale(25, 25);
   document.addEventListener("keydown", handleKeydown);
+  document.addEventListener("keyup", handleKeyup);
   playerReset();
   updateScore();
   update();
@@ -500,6 +596,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   document.removeEventListener("keydown", handleKeydown);
+  document.removeEventListener("keyup", handleKeyup);
   cancelAnimationFrame(animationId);
 });
 </script>
