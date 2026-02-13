@@ -184,7 +184,7 @@ function stopTimer() {
 
 const handleKeydown = (e) => {
   if (e.key.toLowerCase() === "r") resetToStart();
-  if (e.key.toLowerCase() === "p") togglePause();
+  if (e.key === "Escape") togglePause();
 };
 
 onMounted(() => {
@@ -320,7 +320,7 @@ const gridStyle = computed(() => ({
               <span>Flag</span><span class="key">Right Click</span>
             </div>
             <div class="control-item">
-              <span>Pause</span><span class="key">P</span>
+              <span>Pause</span><span class="key">ESC</span>
             </div>
             <div class="control-item">
               <span>Restart</span><span class="key">R</span>

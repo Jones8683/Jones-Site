@@ -215,7 +215,7 @@ function gameLoop() {
 
 const handleKeyDown = (e) => {
   if (["ArrowUp", "ArrowDown", "Space"].includes(e.code)) e.preventDefault();
-  if (e.key.toLowerCase() === "p") {
+  if (e.key === "Escape") {
     togglePause();
     return;
   }
@@ -321,7 +321,7 @@ onUnmounted(() => {
               <div><span class="key">↑</span> <span class="key">↓</span></div>
             </div>
             <div class="control-item">
-              <span>Pause</span> <span class="key">P</span>
+              <span>Pause</span> <span class="key">ESC</span>
             </div>
           </div>
         </div>

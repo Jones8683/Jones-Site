@@ -7,13 +7,13 @@ let animationId = null;
 
 const colors = [
   null,
-  "#FF0D72",
   "#0DC2FF",
-  "#0DFF72",
-  "#F538FF",
+  "#3877FF",
   "#FF8E0D",
   "#FFE138",
-  "#3877FF",
+  "#0DFF72",
+  "#FF0D72",
+  "#F538FF",
 ];
 
 const arena = createMatrix(12, 20);
@@ -34,6 +34,11 @@ let dropInterval = 1000;
 let lastTime = 0;
 let isGameOver = false;
 let isPaused = false;
+let lockDelayCounter = 0;
+let lockMovesCounter = 0;
+const LOCK_DELAY_TIME = 500;
+const MAX_LOCK_MOVES = 15;
+let isLanded = false;
 
 let hardDropEffect = {
   active: false,
@@ -55,38 +60,38 @@ function createMatrix(w, h) {
 function createPiece(type) {
   if (type === "I")
     return [
-      [0, 1, 0, 0],
-      [0, 1, 0, 0],
-      [0, 1, 0, 0],
-      [0, 1, 0, 0],
-    ];
-  if (type === "L")
-    return [
-      [0, 2, 0],
-      [0, 2, 0],
-      [0, 2, 2],
+      [0, 0, 0, 0],
+      [1, 1, 1, 1],
+      [0, 0, 0, 0],
+      [0, 0, 0, 0],
     ];
   if (type === "J")
     return [
-      [0, 3, 0],
-      [0, 3, 0],
-      [3, 3, 0],
+      [2, 0, 0],
+      [2, 2, 2],
+      [0, 0, 0],
+    ];
+  if (type === "L")
+    return [
+      [0, 0, 3],
+      [3, 3, 3],
+      [0, 0, 0],
     ];
   if (type === "O")
     return [
       [4, 4],
       [4, 4],
     ];
-  if (type === "Z")
-    return [
-      [5, 5, 0],
-      [0, 5, 5],
-      [0, 0, 0],
-    ];
   if (type === "S")
     return [
       [0, 6, 6],
       [6, 6, 0],
+      [0, 0, 0],
+    ];
+  if (type === "Z")
+    return [
+      [5, 5, 0],
+      [0, 5, 5],
       [0, 0, 0],
     ];
   if (type === "T")
@@ -139,15 +144,38 @@ function drawMatrix(matrix, offset, context, isGhost = false) {
   matrix.forEach((row, y) => {
     row.forEach((value, x) => {
       if (value !== 0) {
+        let fillStyle = colors[value];
         const bx = x + offset.x;
         const by = y + offset.y;
+
         if (isGhost) {
           context.fillStyle = "rgba(255, 255, 255, 0.1)";
           context.fillRect(bx, by, 1, 1);
           return;
         }
-        context.fillStyle = colors[value];
+
+        if (isLanded && context === ctx && matrix === player.matrix) {
+          const now = Date.now();
+          // Sine wave between 0 and 1
+          const intensity = (Math.sin(now / 50) + 1) / 2;
+          // Interpolate between normal color and a darker version (dimming)
+          // Actually, let's just use globalAlpha or an overlay for simplicity
+          // But effectively, user wants "pulsing dimming".
+          // Let's overlay a semi-transparent white or black.
+          // "Dimmed" implies darker.
+          // Let's modify the fillStyle execution order.
+        }
+
+        context.fillStyle = fillStyle;
         context.fillRect(bx, by, 1, 1);
+
+        if (isLanded && context === ctx && matrix === player.matrix) {
+          const now = Date.now();
+          const alpha = 0.3 + 0.3 * Math.sin(now / 75);
+          context.fillStyle = `rgba(0, 0, 0, ${alpha})`;
+          context.fillRect(bx, by, 1, 1);
+        }
+
         context.fillStyle = "rgba(255, 255, 255, 0.4)";
         context.fillRect(bx, by, 1, 0.15);
         context.fillRect(bx, by, 0.15, 1);
@@ -213,13 +241,20 @@ function playerDrop() {
   player.pos.y++;
   if (collide(arena, player)) {
     player.pos.y--;
-    merge(arena, player);
-    playerReset();
-    arenaSweep();
-    updateScore();
-    player.canHold = true;
+    return;
   }
   dropCounter = 0;
+}
+
+function playerLock() {
+  merge(arena, player);
+  playerReset();
+  arenaSweep();
+  updateScore();
+  player.canHold = true;
+  dropCounter = 0;
+  lockDelayCounter = 0;
+  lockMovesCounter = 0;
 }
 
 function getPieceBounds(matrix) {
@@ -255,6 +290,10 @@ function playerHardDrop() {
     h: player.pos.y - startY + player.matrix.length,
     alpha: 0.4,
   };
+
+  lockDelayCounter = 0;
+  lockMovesCounter = 0;
+
   merge(arena, player);
   playerReset();
   arenaSweep();
@@ -265,7 +304,18 @@ function playerHardDrop() {
 
 function playerMove(dir) {
   player.pos.x += dir;
-  if (collide(arena, player)) player.pos.x -= dir;
+  if (collide(arena, player)) {
+    player.pos.x -= dir;
+    return;
+  }
+  player.pos.y++;
+  if (collide(arena, player)) {
+    if (lockMovesCounter < MAX_LOCK_MOVES) {
+      lockDelayCounter = 0;
+      lockMovesCounter++;
+    }
+  }
+  player.pos.y--;
 }
 
 function playerReset() {
@@ -299,6 +349,14 @@ function playerRotate(dir) {
       return;
     }
   }
+  player.pos.y++;
+  if (collide(arena, player)) {
+    if (lockMovesCounter < MAX_LOCK_MOVES) {
+      lockDelayCounter = 0;
+      lockMovesCounter++;
+    }
+  }
+  player.pos.y--;
 }
 
 function rotate(matrix, dir) {
@@ -346,8 +404,26 @@ function update(time = 0) {
   if (isGameOver || isPaused) return;
   const deltaTime = time - lastTime;
   lastTime = time;
+
   dropCounter += deltaTime;
-  if (dropCounter > dropInterval) playerDrop();
+  if (dropCounter > dropInterval) {
+    playerDrop();
+  }
+
+  player.pos.y++;
+  if (collide(arena, player)) {
+    player.pos.y--;
+    isLanded = true;
+    lockDelayCounter += deltaTime;
+    if (lockDelayCounter > LOCK_DELAY_TIME) {
+      playerLock();
+    }
+  } else {
+    player.pos.y--;
+    isLanded = false;
+    lockDelayCounter = 0;
+  }
+
   draw();
   animationId = requestAnimationFrame(update);
 }
@@ -386,20 +462,26 @@ const handleKeydown = (event) => {
     event.preventDefault();
   }
   if (isGameOver) return;
-  if (event.keyCode === 80) {
+  if (event.keyCode === 27) {
     togglePause();
     return;
   }
   if (isPaused) return;
-  if (event.keyCode === 37) playerMove(-1);
-  else if (event.keyCode === 39) playerMove(1);
-  else if (event.keyCode === 40) {
+  if (event.keyCode === 37) {
+    playerMove(-1);
+  } else if (event.keyCode === 39) {
+    playerMove(1);
+  } else if (event.keyCode === 40) {
     playerDrop();
     player.score += 2;
     updateScore();
-  } else if (event.keyCode === 38) playerRotate(1);
-  else if (event.keyCode === 32) playerHardDrop();
-  else if (event.keyCode === 67) playerHold();
+  } else if (event.keyCode === 38) {
+    playerRotate(1);
+  } else if (event.keyCode === 32) {
+    playerHardDrop();
+  } else if (event.keyCode === 67) {
+    playerHold();
+  }
 };
 
 onMounted(() => {
@@ -547,7 +629,7 @@ onUnmounted(() => {
               <span>Hold</span> <span class="key">C</span>
             </div>
             <div class="control-item">
-              <span>Pause</span> <span class="key">P</span>
+              <span>Pause</span> <span class="key">ESC</span>
             </div>
           </div>
         </div>
