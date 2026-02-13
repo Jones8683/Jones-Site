@@ -1,3 +1,3 @@
-# My Website
+# My Portfolio Website
 
-I have a website. It's at https://JonesJankovic.com.
+My portfolio website built vite Vue 3 and Vite. You can visit it at https://JonesJankovic.com.
