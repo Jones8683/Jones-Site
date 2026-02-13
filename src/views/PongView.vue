@@ -67,10 +67,9 @@ function resetPositions() {
   setTimeout(() => {
     if (!isRunning) return;
     isResetting = false;
-    ball.dx = (Math.random() > 0.5 ? 1 : -1) * ball.speed;
-    let randomY = Math.random() * 2 - 1;
-    if (Math.abs(randomY) < 0.2) randomY = randomY < 0 ? -0.5 : 0.5;
-    ball.dy = randomY * ball.speed;
+    let dir = Math.random() > 0.5 ? 1 : -1;
+    ball.dx = dir * ball.speed;
+    ball.dy = (Math.random() * 2 - 1) * (ball.speed * 0.5);
   }, 1000);
 }
 
@@ -91,7 +90,7 @@ function update() {
   if (gameMode === "cpu") {
     let targetY = ball.y - PADDLE_H / 2;
     let diff = targetY - leftPaddle.y;
-    let move = diff * 0.15;
+    let move = diff * 0.2;
 
     if (move > leftPaddle.aiSpeed) move = leftPaddle.aiSpeed;
     if (move < -leftPaddle.aiSpeed) move = -leftPaddle.aiSpeed;
@@ -113,35 +112,35 @@ function update() {
     ball.y += ball.dy;
   }
 
-  if (ball.y - BALL_SIZE <= 0 && ball.dy < 0) {
+  if (ball.y < BALL_SIZE) {
+    ball.y = BALL_SIZE;
     ball.dy *= -1;
-  } else if (ball.y + BALL_SIZE >= canvas.height && ball.dy > 0) {
+  } else if (ball.y > canvas.height - BALL_SIZE) {
+    ball.y = canvas.height - BALL_SIZE;
     ball.dy *= -1;
   }
-
-  if (ball.y < -20) ball.y = BALL_SIZE;
-  if (ball.y > canvas.height + 20) ball.y = canvas.height - BALL_SIZE;
 
   let paddle = ball.x < canvas.width / 2 ? leftPaddle : rightPaddle;
   if (collision(ball, paddle)) {
     let collidePoint = (ball.y - (paddle.y + PADDLE_H / 2)) / (PADDLE_H / 2);
 
-    if (collidePoint > 0.9) collidePoint = 0.9;
-    if (collidePoint < -0.9) collidePoint = -0.9;
+    if (collidePoint > 1) collidePoint = 1;
+    if (collidePoint < -1) collidePoint = -1;
 
     let angleRad = (Math.PI / 4) * collidePoint;
     let direction = ball.x < canvas.width / 2 ? 1 : -1;
 
     ball.speed += 0.5;
+    if (ball.speed > 15) ball.speed = 15;
+
     ball.dx = direction * ball.speed * Math.cos(angleRad);
     ball.dy = ball.speed * Math.sin(angleRad);
 
-    if (Math.abs(ball.dy) < 0.5) {
-      ball.dy = ball.dy < 0 ? -1 : 1;
+    if (paddle === leftPaddle) {
+      ball.x = leftPaddle.x + PADDLE_W + BALL_SIZE;
+    } else {
+      ball.x = rightPaddle.x - BALL_SIZE;
     }
-
-    if (paddle === leftPaddle) ball.x = leftPaddle.x + PADDLE_W + BALL_SIZE + 1;
-    else ball.x = rightPaddle.x - BALL_SIZE - 1;
   }
 
   if (ball.x < 0) {
