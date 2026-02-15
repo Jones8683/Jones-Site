@@ -414,24 +414,7 @@ function playerRotate(dir) {
         return;
       }
       player.pos.y++;
-
       player.pos.x = pos;
-      for (let i = 1; i <= 2; i++) {
-        player.pos.x = pos + i;
-        if (!collide(arena, player)) {
-          lockDelayCounter = 0;
-          lockMovesCounter = 0;
-          return;
-        }
-        player.pos.x = pos - i;
-        if (!collide(arena, player)) {
-          lockDelayCounter = 0;
-          lockMovesCounter = 0;
-          return;
-        }
-      }
-      player.pos.x = pos;
-      player.pos.y++;
       rotate(player.matrix, -dir);
       return;
     }
