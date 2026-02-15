@@ -71,7 +71,7 @@ import profilePic from "@/assets/github.png";
           <li>
             Email:
             <a href="mailto:outerrim1977@gmail.com" class="repo-link"
-              >outerrim1977@gmail.com</a
+              >jones@jonesjankovic.com</a
             >
           </li>
           <li>
