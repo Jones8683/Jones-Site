@@ -237,13 +237,26 @@ function arenaSweep() {
 
   if (rowCount > 0) {
     const level = Math.floor(player.lines / 10) + 1;
-    let lineScore = 0;
-    if (rowCount === 1) lineScore = 100 * level;
-    else if (rowCount === 2) lineScore = 300 * level;
-    else if (rowCount === 3) lineScore = 500 * level;
-    else if (rowCount === 4) lineScore = 800 * level;
+    let base = 0;
+    let type = "";
+    if (rowCount === 1) {
+      base = 100;
+      type = "Single";
+    } else if (rowCount === 2) {
+      base = 300;
+      type = "Double";
+    } else if (rowCount === 3) {
+      base = 500;
+      type = "Triple";
+    } else if (rowCount === 4) {
+      base = 800;
+      type = "Tetris";
+    }
 
-    player.score += lineScore;
+    const points = base * level;
+    console.log(`${type}: ${level} x ${base} = ${points}.`);
+
+    player.score += points;
     player.lines += rowCount;
     updateScore();
   }
@@ -402,6 +415,23 @@ function playerRotate(dir) {
       }
       player.pos.y++;
 
+      player.pos.x = pos;
+      for (let i = 1; i <= 2; i++) {
+        player.pos.x = pos + i;
+        if (!collide(arena, player)) {
+          lockDelayCounter = 0;
+          lockMovesCounter = 0;
+          return;
+        }
+        player.pos.x = pos - i;
+        if (!collide(arena, player)) {
+          lockDelayCounter = 0;
+          lockMovesCounter = 0;
+          return;
+        }
+      }
+      player.pos.x = pos;
+      player.pos.y++;
       rotate(player.matrix, -dir);
       return;
     }
@@ -517,7 +547,7 @@ function update(time = 0) {
   animationId = requestAnimationFrame(update);
 }
 
-let lastLoggedLines = -1;
+let lastLoggedLevel = 0;
 
 function updateScore() {
   const el = document.getElementById("scoreDiv");
@@ -545,16 +575,14 @@ function updateScore() {
   const currentG = gValues[level] || (level > 15 ? 20.0 : 0.01667);
   dropInterval = 1000 / (60 * currentG);
 
-  if (player.lines > lastLoggedLines) {
-    const linesInLevel = player.lines % 10;
-    console.log(
-      `Line ${linesInLevel} of 10 cleared for Level ${level}. Current G: ${currentG}`,
-    );
-    lastLoggedLines = player.lines;
+  if (level > lastLoggedLevel) {
+    console.log(`Level ${level}: Current G: ${currentG}`);
+    lastLoggedLevel = level;
   }
 }
 
 function resetGame() {
+  lastLoggedLevel = 0;
   arena.forEach((row) => row.fill(0));
   player.score = 0;
   player.lines = 0;
