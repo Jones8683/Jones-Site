@@ -236,7 +236,14 @@ function arenaSweep() {
   }
 
   if (rowCount > 0) {
-    player.score += rowCount * 140;
+    const level = Math.floor(player.lines / 10) + 1;
+    let lineScore = 0;
+    if (rowCount === 1) lineScore = 100 * level;
+    else if (rowCount === 2) lineScore = 300 * level;
+    else if (rowCount === 3) lineScore = 500 * level;
+    else if (rowCount === 4) lineScore = 800 * level;
+
+    player.score += lineScore;
     player.lines += rowCount;
     updateScore();
   }
@@ -257,6 +264,8 @@ function playerDrop() {
     return false;
   }
   dropCounter = 0;
+  lockDelayCounter = 0;
+  lockMovesCounter = 0;
   return true;
 }
 
@@ -377,25 +386,37 @@ function playerReset() {
 
 function playerRotate(dir) {
   const pos = player.pos.x;
+  const initY = player.pos.y;
   let offset = 1;
   rotate(player.matrix, dir);
   while (collide(arena, player)) {
     player.pos.x += offset;
     offset = -(offset + (offset > 0 ? 1 : -1));
     if (offset > player.matrix[0].length) {
-      rotate(player.matrix, -dir);
       player.pos.x = pos;
+      player.pos.y--;
+      if (!collide(arena, player)) {
+        lockDelayCounter = 0;
+        lockMovesCounter = 0;
+        return;
+      }
+      player.pos.y++;
+
+      rotate(player.matrix, -dir);
       return;
     }
   }
-  player.pos.y++;
-  if (collide(arena, player)) {
-    if (lockMovesCounter < MAX_LOCK_MOVES) {
-      lockDelayCounter = 0;
-      lockMovesCounter++;
+
+  if (player.pos.y === initY) {
+    player.pos.y++;
+    if (collide(arena, player)) {
+      if (lockMovesCounter < MAX_LOCK_MOVES) {
+        lockDelayCounter = 0;
+        lockMovesCounter++;
+      }
     }
+    player.pos.y--;
   }
-  player.pos.y--;
 }
 
 function rotate(matrix, dir) {
@@ -496,11 +517,41 @@ function update(time = 0) {
   animationId = requestAnimationFrame(update);
 }
 
+let lastLoggedLines = -1;
+
 function updateScore() {
   const el = document.getElementById("scoreDiv");
   if (el) el.innerText = player.score;
   const level = Math.floor(player.lines / 10) + 1;
-  dropInterval = 1000 * Math.pow(0.8, level - 1);
+
+  const gValues = {
+    1: 0.01667,
+    2: 0.021017,
+    3: 0.026977,
+    4: 0.035256,
+    5: 0.04693,
+    6: 0.06361,
+    7: 0.0879,
+    8: 0.1236,
+    9: 0.1775,
+    10: 0.2598,
+    11: 0.388,
+    12: 0.59,
+    13: 0.92,
+    14: 1.46,
+    15: 2.36,
+  };
+
+  const currentG = gValues[level] || (level > 15 ? 20.0 : 0.01667);
+  dropInterval = 1000 / (60 * currentG);
+
+  if (player.lines > lastLoggedLines) {
+    const linesInLevel = player.lines % 10;
+    console.log(
+      `Line ${linesInLevel} of 10 cleared for Level ${level}. Current G: ${currentG}`,
+    );
+    lastLoggedLines = player.lines;
+  }
 }
 
 function resetGame() {
